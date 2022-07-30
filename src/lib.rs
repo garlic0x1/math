@@ -20,15 +20,20 @@ mod tests {
 
     #[test]
     fn sieves() {
-        assert_eq!(eratosthenes(12), vec![2, 3, 5, 7, 11]);
-        assert_eq!(eratosthenes(23), vec![2, 3, 5, 7, 11, 13, 17, 19, 23]);
+        assert_eq!(composites(6), vec![4, 6]);
+        assert_eq!(composites(12), vec![4, 6, 8, 9, 10, 12]);
+        assert_eq!(primes(12), vec![2, 3, 5, 7, 11]);
+        assert_eq!(primes(23), vec![2, 3, 5, 7, 11, 13, 17, 19, 23]);
     }
 
     #[test]
     fn permutations() {
-        let mut permuter = Permuter::new(vec!['a', 'b', 'c']);
-        let mut perms: Vec<Vec<char>> = permuter.collect();
+        let permuter = Permuter::new(vec!['a', 'b', 'c']);
+        let perms: Vec<Vec<char>> = permuter.collect();
         assert_eq!(format!("{:?}", perms), "[['a', 'b', 'c'], ['a', 'c', 'b'], ['b', 'a', 'c'], ['b', 'c', 'a'], ['c', 'a', 'b'], ['c', 'b', 'a']]");
+        let permuter = Permuter::new(vec!['b', 'c']);
+        let perms: Vec<Vec<char>> = permuter.collect();
+        assert_eq!(format!("{:?}", perms), "[['b', 'c'], ['c', 'b']]");
     }
 
     #[test]

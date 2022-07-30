@@ -76,6 +76,10 @@ impl BigInteger {
         return s;
     }
 
+    pub fn raw_vec(&self) -> &Vec<u8> {
+        &self.array
+    }
+
     pub fn multiply(&mut self, factor: u8) {
         let mut carry: u8 = 0;
         for i in 0..self.array.len() {
