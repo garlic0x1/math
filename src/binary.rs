@@ -1,13 +1,13 @@
 use anyhow::{bail, Result};
-use bitvec::{bitarr, bits, bitvec, prelude::BitVec};
+use bitvec::prelude::BitVec;
 
 pub struct Binary {
-    // stored little endian
+    /// stored little endian
     bitvec: BitVec,
 }
 
 impl Binary {
-    // takes a big endian &str
+    /// takes a big endian &str
     pub fn from_str(num: &str) -> Result<Self> {
         let mut bitvec = BitVec::new();
         for c in num.chars().rev() {
@@ -73,5 +73,13 @@ impl Binary {
         bitvec.push(false);
         bitvec.extend(self.bitvec.clone());
         self.bitvec = bitvec;
+    }
+
+    pub fn even(&self) -> bool {
+        if let Some(b) = self.bitvec.first() {
+            *b == false
+        } else {
+            true
+        }
     }
 }

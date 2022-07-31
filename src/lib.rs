@@ -36,6 +36,12 @@ mod tests {
         let permuter = Permuter::new(vec!['b', 'c']);
         let perms: Vec<Vec<char>> = permuter.collect();
         assert_eq!(format!("{:?}", perms), "[['b', 'c'], ['c', 'b']]");
+        let mut permuter = Permuter::new(vec![1, 2, 3]);
+        let perms: Vec<Vec<u32>> = permuter.rev().collect();
+        assert_eq!(
+            format!("{:?}", perms),
+            "[[1, 2, 3], [3, 2, 1], [3, 1, 2], [2, 3, 1], [2, 1, 3], [1, 3, 2]]"
+        );
     }
 
     #[test]
@@ -43,13 +49,16 @@ mod tests {
         let bin = Binary::from_u32(419);
         let s = bin.big_endian();
         assert_eq!(&s, "110100011");
+        assert_eq!(bin.even(), false);
         let bin = Binary::from_u32(23);
         let s = bin.little_endian();
         assert_eq!(&s, "11101");
+        assert_eq!(bin.even(), false);
         let mut bin = Binary::from_str("110100011").unwrap();
         bin.double();
         let n = bin.to_u32();
         assert_eq!(n, 838);
+        assert_eq!(bin.even(), true);
     }
 
     #[test]
@@ -61,7 +70,10 @@ mod tests {
     }
 
     #[test]
-    fn special_props() {
-        assert_eq!(is_palindromic(43400434), true);
+    fn palindromes() {
+        assert_eq!(is_palindromic_num(43400434), true);
+        assert_eq!(is_palindromic_num(48400434), false);
+        assert_eq!(is_palindromic(vec!["apple", "cherry", "blueberry"]), false);
+        assert_eq!(is_palindromic(vec!["apple", "cherry", "apple"]), true);
     }
 }

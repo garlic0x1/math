@@ -1,3 +1,4 @@
+/// perform sieve to limit, true is prime, false is composite
 pub fn eratosthenes(limit: u64) -> Vec<bool> {
     let mut sieve = vec![true; limit as usize + 1];
 
@@ -16,6 +17,7 @@ pub fn eratosthenes(limit: u64) -> Vec<bool> {
     sieve
 }
 
+/// vec of primes up to and including limit
 pub fn primes(limit: u64) -> Vec<u64> {
     let mut primes = Vec::new();
 
@@ -30,6 +32,7 @@ pub fn primes(limit: u64) -> Vec<u64> {
     primes
 }
 
+/// vec of composites up to and including limit
 pub fn composites(limit: u64) -> Vec<u64> {
     let mut composites = Vec::new();
 

@@ -5,11 +5,12 @@ pub struct Permuter<T> {
     permutation: Vec<T>,
 }
 
-impl<T: Clone + Ord + Eq + PartialEq> Permuter<T> {
+impl<'a, T: Clone + Ord + Eq + PartialEq> Permuter<T> {
+    /// create an iterator over the permutations of vec
     pub fn new(vec: Vec<T>) -> Self {
         Self {
             start: vec.clone(),
-            last: Some(vec.clone()),
+            last: None,
             end: false,
             permutation: vec,
         }
@@ -25,10 +26,57 @@ impl<T: Clone + Ord + Eq + PartialEq> Permuter<T> {
         }
     }
 
+    fn reverse_substr(&mut self, start: usize, end: usize) {
+        let mut i = start;
+        let mut j = end;
+        while i < j {
+            self.swap(i, j);
+            i += 1;
+            j -= 1;
+        }
+    }
+
     fn swap(&mut self, i: usize, j: usize) {
         let temp = self.permutation[i].clone();
         self.permutation[i] = self.permutation[j].clone();
         self.permutation[j] = temp;
+    }
+}
+
+impl<T: Clone + Ord + Eq + PartialEq> DoubleEndedIterator for Permuter<T> {
+    fn next_back(&mut self) -> Option<Self::Item> {
+        let last = self.permutation.clone();
+        self.last = Some(last.clone());
+
+        if self.end {
+            return None;
+        }
+
+        let n = self.permutation.len() as i32 - 1;
+
+        // find largest index i such that perm[i-1] > str[i]
+        let mut i = n;
+        while i > 0 && self.permutation[i as usize - 1] <= self.permutation[i as usize] {
+            i -= 1;
+        }
+
+        if i > 0 {
+            let mut j = i - 1;
+
+            while (j + 1 <= n)
+                && self.permutation[j as usize + 1] < self.permutation[i as usize - 1]
+            {
+                j += 1;
+            }
+            self.swap(i as usize - 1, j as usize);
+        }
+        self.reverse_substr(i as usize, n as usize);
+
+        if self.permutation == self.start {
+            self.end = true;
+        }
+
+        return Some(last);
     }
 }
 

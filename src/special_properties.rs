@@ -1,4 +1,5 @@
-pub fn is_palindromic(n: u64) -> bool {
+/// determine if an integer is palindromic
+pub fn is_palindromic_num(n: u64) -> bool {
     let nf = n as f64;
     let max = nf.log10().floor() as u64 + 1;
 
@@ -14,4 +15,16 @@ pub fn is_palindromic(n: u64) -> bool {
         i += 1;
     }
     return true;
+}
+
+/// determine if a vec is palindromic
+pub fn is_palindromic<T: Eq>(arr: Vec<T>) -> bool {
+    for a in 0..=(arr.len() / 2) {
+        let b = arr.len() - (a + 1);
+
+        if arr[a] != arr[b] {
+            return false;
+        }
+    }
+    true
 }
