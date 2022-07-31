@@ -44,11 +44,12 @@ mod tests {
         let s = bin.big_endian();
         assert_eq!(&s, "110100011");
         let bin = Binary::from_u32(23);
-        let s = bin.big_endian();
-        assert_eq!(&s, "10111");
-        let bin = Binary::from_u32(23);
         let s = bin.little_endian();
         assert_eq!(&s, "11101");
+        let mut bin = Binary::from_str("110100011").unwrap();
+        bin.double();
+        let n = bin.to_u32();
+        assert_eq!(n, 838);
     }
 
     #[test]
