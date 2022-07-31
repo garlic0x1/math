@@ -1,4 +1,5 @@
 pub mod big_integer;
+pub mod binary;
 pub mod factor;
 pub mod permute;
 pub mod sieve;
@@ -7,6 +8,7 @@ pub mod special_properties;
 #[cfg(test)]
 mod tests {
     use crate::big_integer::*;
+    use crate::binary::*;
     use crate::factor::*;
     use crate::permute::Permuter;
     use crate::sieve::*;
@@ -34,6 +36,19 @@ mod tests {
         let permuter = Permuter::new(vec!['b', 'c']);
         let perms: Vec<Vec<char>> = permuter.collect();
         assert_eq!(format!("{:?}", perms), "[['b', 'c'], ['c', 'b']]");
+    }
+
+    #[test]
+    fn binary_nums() {
+        let bin = Binary::from_u32(419);
+        let s = bin.big_endian();
+        assert_eq!(&s, "110100011");
+        let bin = Binary::from_u32(23);
+        let s = bin.big_endian();
+        assert_eq!(&s, "10111");
+        let bin = Binary::from_u32(23);
+        let s = bin.little_endian();
+        assert_eq!(&s, "11101");
     }
 
     #[test]
