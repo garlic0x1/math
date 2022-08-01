@@ -25,19 +25,35 @@ impl BigFraction {
         }
     }
 
-    pub fn numerator(&self) -> u64 {
-        let mut num = 1;
+    pub fn numerator(&self) -> Result<u64> {
+        let mut num: u64 = 1;
         for (prime, count) in self.numerator.iter() {
-            num *= prime.pow(*count);
+            if let Some(fact) = prime.checked_pow(*count) {
+                if let Some(new) = num.checked_mul(fact) {
+                    num = new;
+                } else {
+                    yeet!("overflow");
+                }
+            } else {
+                yeet!("overflow");
+            }
         }
-        num
+        Ok(num)
     }
 
-    pub fn denominator(&self) -> u64 {
-        let mut den = 1;
+    pub fn denominator(&self) -> Result<u64> {
+        let mut den: u64 = 1;
         for (prime, count) in self.denominator.iter() {
-            den *= prime.pow(*count);
+            if let Some(fact) = prime.checked_pow(*count) {
+                if let Some(new) = den.checked_mul(fact) {
+                    den = new;
+                } else {
+                    yeet!("overflow");
+                }
+            } else {
+                yeet!("overflow");
+            }
         }
-        den
+        Ok(den)
     }
 }

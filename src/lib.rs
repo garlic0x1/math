@@ -12,6 +12,7 @@ pub mod special_properties;
 mod tests {
     use crate::big_integer::*;
     use crate::binary::*;
+    use crate::combinations::n_combinations;
     use crate::factor::*;
     use crate::functions::factorial;
     use crate::functions::factorial_map;
@@ -51,19 +52,22 @@ mod tests {
     }
 
     #[test]
+    fn combinations() {
+        assert_eq!(n_combinations(5, 3).unwrap(), 10);
+        assert_eq!(n_combinations(23, 10).unwrap(), 1144066);
+    }
+
+    #[test]
     fn binary_nums() {
         let bin = Binary::from_u32(419);
-        let s = bin.big_endian();
-        assert_eq!(&s, "110100011");
+        assert_eq!(&bin.big_endian(), "110100011");
         assert_eq!(bin.even(), false);
         let bin = Binary::from_u32(23);
-        let s = bin.little_endian();
-        assert_eq!(&s, "11101");
+        assert_eq!(&bin.little_endian(), "11101");
         assert_eq!(bin.even(), false);
         let mut bin = Binary::from_str("110100011").unwrap();
         bin.double();
-        let n = bin.to_u32();
-        assert_eq!(n, 838);
+        assert_eq!(bin.to_u32(), 838);
         assert_eq!(bin.even(), true);
     }
 

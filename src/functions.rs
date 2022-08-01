@@ -9,21 +9,23 @@ pub fn pentagon(n: u32) -> u32 {
     n * (3 * n - 1) / 2
 }
 
+pub fn multiply_map(this: &mut HashMap<u64, u32>, that: &HashMap<u64, u32>) {
+    for (k, v) in that.iter() {
+        if let Some(v2) = this.get_mut(k) {
+            *v2 += v;
+        } else {
+            this.insert(*k, *v);
+        }
+    }
+}
+
 pub fn factorial_map(n: u64) -> HashMap<u64, u32> {
     let mut map = HashMap::new();
-    if n > 0 {
+    if n > 1 {
         map = fact_map(n);
         let map2 = factorial_map(n - 1);
 
-        // need to combine maps
-        for (prime, count) in map2.iter().filter(|(&p, _)| p > 1) {
-            if let Some(c) = map.get_mut(&prime) {
-                *c += count;
-            } else {
-                eprintln!("{}", *prime);
-                map.insert(*prime, *count);
-            }
-        }
+        multiply_map(&mut map, &map2);
     }
     map
 }

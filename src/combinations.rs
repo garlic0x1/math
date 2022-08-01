@@ -1,9 +1,22 @@
 use anyhow::{bail as yeet, Result};
 
-pub fn n_combinations(n: u32, r: u32) -> Result<u32> {
+use crate::{
+    big_fraction::BigFraction,
+    functions::{factorial_map, multiply_map},
+};
+
+pub fn n_combinations(n: u64, r: u64) -> Result<u64> {
     if n < r {
         yeet!("n < r, cannot make combinations");
     }
 
-    Ok(1)
+    let numerator = factorial_map(n);
+    let mut denominator = factorial_map(r);
+    let den2 = factorial_map(n - r);
+    multiply_map(&mut denominator, &den2);
+    let mut fraction = BigFraction::from_fact_map(numerator, denominator);
+    fraction.simplify();
+
+    let combinations = fraction.numerator()? / fraction.denominator()?;
+    Ok(combinations)
 }
