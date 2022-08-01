@@ -1,3 +1,5 @@
+use std::{collections::HashMap, hash::Hash};
+
 pub struct Permuter<T> {
     start: Vec<T>,
     last: Option<Vec<T>>,
@@ -5,7 +7,7 @@ pub struct Permuter<T> {
     permutation: Vec<T>,
 }
 
-impl<'a, T: Clone + Ord + Eq + PartialEq> Permuter<T> {
+impl<'a, T: Clone + Ord + Eq + PartialEq + Hash> Permuter<T> {
     /// create an iterator over the permutations of vec
     pub fn new(vec: Vec<T>) -> Self {
         Self {
@@ -14,6 +16,32 @@ impl<'a, T: Clone + Ord + Eq + PartialEq> Permuter<T> {
             end: false,
             permutation: vec,
         }
+    }
+
+    pub fn is_permutation_of(&self, other: Vec<T>) -> bool {
+        if self.permutation.len() != other.len() {
+            return false;
+        }
+
+        let mut set1 = HashMap::new();
+        for x in other.iter() {
+            if let Some(count) = set1.get_mut(x) {
+                *count += 1;
+            } else {
+                set1.insert(x.clone(), 1);
+            }
+        }
+
+        let mut set2 = HashMap::new();
+        for x in self.permutation.iter() {
+            if let Some(count) = set2.get_mut(x) {
+                *count += 1;
+            } else {
+                set2.insert(x.clone(), 1);
+            }
+        }
+
+        set1 == set2
     }
 
     fn reverse(&mut self, start: usize) {
@@ -43,7 +71,7 @@ impl<'a, T: Clone + Ord + Eq + PartialEq> Permuter<T> {
     }
 }
 
-impl<T: Clone + Ord + Eq + PartialEq> DoubleEndedIterator for Permuter<T> {
+impl<T: Clone + Ord + Eq + PartialEq + Hash> DoubleEndedIterator for Permuter<T> {
     fn next_back(&mut self) -> Option<Self::Item> {
         let last = self.permutation.clone();
         self.last = Some(last.clone());
@@ -80,7 +108,7 @@ impl<T: Clone + Ord + Eq + PartialEq> DoubleEndedIterator for Permuter<T> {
     }
 }
 
-impl<T: Clone + Ord + Eq + PartialEq> Iterator for Permuter<T> {
+impl<T: Clone + Ord + Eq + PartialEq + Hash> Iterator for Permuter<T> {
     type Item = Vec<T>;
 
     fn next(&mut self) -> Option<Self::Item> {

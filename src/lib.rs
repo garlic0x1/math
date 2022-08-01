@@ -1,7 +1,10 @@
+pub mod big_fraction;
 pub mod big_integer;
 pub mod binary;
+pub mod combinations;
 pub mod factor;
-pub mod permute;
+pub mod functions;
+pub mod permutations;
 pub mod sieve;
 pub mod special_properties;
 
@@ -10,7 +13,9 @@ mod tests {
     use crate::big_integer::*;
     use crate::binary::*;
     use crate::factor::*;
-    use crate::permute::Permuter;
+    use crate::functions::factorial;
+    use crate::functions::factorial_map;
+    use crate::permutations::Permuter;
     use crate::sieve::*;
     use crate::special_properties::*;
 
@@ -18,6 +23,7 @@ mod tests {
     fn factor_test() {
         assert_eq!(prime_factors(13195), vec![5, 7, 13, 29]);
         assert_eq!(largest_prime(600851475143), 6857);
+        assert_eq!(is_prime(2_147_483_647), true);
     }
 
     #[test]
@@ -36,7 +42,7 @@ mod tests {
         let permuter = Permuter::new(vec!['b', 'c']);
         let perms: Vec<Vec<char>> = permuter.collect();
         assert_eq!(format!("{:?}", perms), "[['b', 'c'], ['c', 'b']]");
-        let mut permuter = Permuter::new(vec![1, 2, 3]);
+        let permuter = Permuter::new(vec![1, 2, 3]);
         let perms: Vec<Vec<u32>> = permuter.rev().collect();
         assert_eq!(
             format!("{:?}", perms),
@@ -75,5 +81,13 @@ mod tests {
         assert_eq!(is_palindromic_num(48400434), false);
         assert_eq!(is_palindromic(vec!["apple", "cherry", "blueberry"]), false);
         assert_eq!(is_palindromic(vec!["apple", "cherry", "apple"]), true);
+    }
+
+    #[test]
+    fn misc_funcs() {
+        assert_eq!(factorial(0), 1);
+        assert_eq!(factorial(1), 1);
+        assert_eq!(factorial(9), 362880);
+        assert_eq!(fact_map(362880), factorial_map(9));
     }
 }

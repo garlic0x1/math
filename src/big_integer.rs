@@ -1,4 +1,4 @@
-use anyhow::{bail, Result};
+use anyhow::{bail as yeet, Result};
 
 pub struct BigInteger {
     // little endian
@@ -7,6 +7,13 @@ pub struct BigInteger {
 }
 
 impl BigInteger {
+    pub fn from_vec(vec: Vec<u8>) -> Self {
+        Self {
+            sign: true,
+            array: vec,
+        }
+    }
+
     pub fn from_string(s: &str) -> Result<Self> {
         let mut array: Vec<u8> = Vec::new();
         let mut sign = true;
@@ -27,7 +34,7 @@ impl BigInteger {
             if let Some(digit) = c.to_digit(10) {
                 array.push(digit as u8);
             } else {
-                bail!("must consist of digits and optional sign");
+                yeet!("must consist of digits and optional sign");
             }
         }
 
@@ -37,7 +44,7 @@ impl BigInteger {
     pub fn from_u32(n: u32) -> Self {
         let mut arr: Vec<u8> = Vec::new();
         let mut place: u32 = 1;
-        while place < n {
+        while place <= n {
             let val = (n % (place * 10)) / place;
             arr.push(val as u8);
             place *= 10;

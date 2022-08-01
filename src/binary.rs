@@ -1,4 +1,4 @@
-use anyhow::{bail, Result};
+use anyhow::{bail as yeet, Result};
 use bitvec::prelude::BitVec;
 
 pub struct Binary {
@@ -14,7 +14,7 @@ impl Binary {
             match c {
                 '1' => bitvec.push(true),
                 '0' => bitvec.push(false),
-                other => bail!("{} is not a binary number", other),
+                other => yeet!("{} is not a binary number", other),
             }
         }
         Ok(Self { bitvec })
