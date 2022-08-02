@@ -2,6 +2,7 @@ pub mod big_fraction;
 pub mod big_integer;
 pub mod binary;
 pub mod combinations;
+pub mod crypto;
 pub mod factor;
 pub mod functions;
 pub mod permutations;
@@ -12,13 +13,17 @@ pub mod special_properties;
 mod tests {
     use crate::big_integer::*;
     use crate::binary::*;
-    use crate::combinations::n_combinations;
+    use crate::combinations::*;
     use crate::factor::*;
-    use crate::functions::factorial;
-    use crate::functions::factorial_map;
-    use crate::permutations::Permuter;
+    use crate::functions::*;
+    use crate::permutations::*;
     use crate::sieve::*;
     use crate::special_properties::*;
+
+    #[test]
+    fn crypto() {
+        assert_eq!(65 ^ 42, 107);
+    }
 
     #[test]
     fn factor_test() {
@@ -89,6 +94,17 @@ mod tests {
 
     #[test]
     fn misc_funcs() {
+        assert_eq!(numcat(124, 77), 12477);
+        assert_eq!(place(1, 0), Some(1));
+        assert_eq!(place(0, 0), Some(0));
+        assert_eq!(place(124, 0), Some(4));
+        assert_eq!(place(124, 2), Some(1));
+        assert_eq!(place(2550, 0), Some(0));
+        assert_eq!(place(2550, 2), Some(5));
+        assert_eq!(place(2550, 5), None);
+        assert_eq!(numdigits(25502), 5);
+        assert_eq!(numdigits(0), 1);
+        assert_eq!(numdigits(1), 1);
         assert_eq!(factorial(0), 1);
         assert_eq!(factorial(1), 1);
         assert_eq!(factorial(9), 362880);
