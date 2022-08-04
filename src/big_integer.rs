@@ -1,5 +1,6 @@
 use anyhow::{bail as yeet, Result};
 
+#[derive(Clone)]
 pub struct BigInteger {
     // little endian
     sign: bool,
@@ -78,7 +79,7 @@ impl BigInteger {
             s.push('-');
         }
         for i in self.array.iter().rev() {
-            s.push_str(&format!("{}{}", s, i));
+            s.push_str(&format!("{i}"));
         }
         return s;
     }
@@ -87,11 +88,59 @@ impl BigInteger {
         &self.array
     }
 
-    pub fn multiply(&mut self, factor: u8) {
-        let mut carry: u8 = 0;
-        for i in 0..self.array.len() {
-            carry = self.multiply_place(i, carry, factor);
+    /*
+           234
+        x   17
+
+          1638
+        + 2340
+
+          3978
+    */
+
+    pub fn multiply(&mut self, other: &Self) {
+        let mut sum = Self::from_u32(0);
+
+        println!("{}", self.to_u32().unwrap());
+        for (place, digit) in other.array.iter().enumerate() {
+            let mut a = self.clone();
+            println!("{digit} {place} {}", a.to_string());
+            a.multiply_digit(*digit).unwrap();
+            println!("{digit} {place} {}", a.to_string());
+            a.pow_10(place);
+            println!("{digit} {place} {}", a.to_string());
+            sum.add(&a);
+            println!("sum: {}", sum.to_u32().unwrap());
         }
+
+        self.array = sum.raw_vec().clone();
+    }
+
+    pub fn pow_10(&mut self, n: usize) {
+        let mut vec = vec![0; n];
+        vec.extend(self.array.clone());
+        self.array = vec;
+    }
+
+    /// must be a single digit factor
+    pub fn multiply_digit(&mut self, factor: u8) -> Result<()> {
+        if factor > 9 {
+            yeet!("must multiply by single digit factor");
+        }
+
+        // fold over the array, multiplying and carrying
+        let carry = self
+            .array
+            .clone()
+            .iter()
+            .enumerate()
+            .fold(0, |carry, (place, digit)| {
+                let product = digit * factor + carry;
+                self.array[place] = product % 10;
+                return product / 10;
+            });
+
+        // we can have either one or two value carries this way.
         if carry != 0 {
             if carry / 10 < 1 {
                 self.array.push(carry);
@@ -100,54 +149,33 @@ impl BigInteger {
                 self.array.push(carry / 10);
             }
         }
+        Ok(())
     }
 
-    fn multiply_place(&mut self, place: usize, carry: u8, factor: u8) -> u8 {
-        let product = (self.array.get(place).unwrap() * factor) + carry;
-        self.array[place as usize] = product % 10;
-        return product / 10;
-    }
+    pub fn add(&mut self, other: &Self) {
+        // make sure self is not shorter than other, else recursively swap
+        if self.array.len() < other.array.len() {
+            let mut s = other.clone();
+            s.add(&self);
+            self.array = s.array;
+            return;
+        }
 
-    pub fn add(&mut self, add: &Self) {
-        let mut i = 0;
-        let mut carry = 0;
-        loop {
-            if let Some((sum, car)) = self.add_place(i, add, carry) {
-                self.array[i] = sum;
-                carry = car;
-                i += 1;
-            } else {
-                if carry != 0 {
-                    self.array.push(carry);
-                }
-                break;
-            }
-        }
-    }
+        // fold over numbers with carry
+        let carry = self
+            .array
+            .iter_mut()
+            .zip(other.array.iter().chain(std::iter::repeat(&0)))
+            .fold(0, |carry, (this, that)| {
+                // carry the sum of column div 10
+                let c = (carry + *this + that) / 10;
+                // result is the sum of column mod 10
+                *this = (carry + *this + that) % 10;
+                return c;
+            });
 
-    fn add_place(&mut self, place: usize, add: &Self, carry: u8) -> Option<(u8, u8)> {
-        let a: u8;
-        let b: u8;
-        let mut ending = false;
-        if let Some(x) = self.array.get(place) {
-            a = *x;
-        } else {
-            a = 0;
-            ending = true;
+        if carry != 0 {
+            self.array.push(carry);
         }
-        if let Some(x) = add.array.get(place) {
-            b = *x;
-            if ending {
-                self.array.push(0);
-            }
-        } else {
-            if ending {
-                return None;
-            } else {
-                b = 0;
-            }
-        }
-        let sum = carry + a + b;
-        Some((sum % 10, sum / 10))
     }
 }

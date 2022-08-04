@@ -7,7 +7,6 @@ pub mod factor;
 pub mod functions;
 pub mod permutations;
 pub mod sieve;
-pub mod special_properties;
 
 #[cfg(test)]
 mod tests {
@@ -18,7 +17,7 @@ mod tests {
     use crate::functions::*;
     use crate::permutations::*;
     use crate::sieve::*;
-    use crate::special_properties::*;
+    use std::time::Instant;
 
     #[test]
     fn crypto() {
@@ -81,7 +80,24 @@ mod tests {
         let mut num1 = BigInteger::from_u32(1234);
         let num2 = BigInteger::from_string("4321").unwrap();
         num1.add(&num2);
+
         assert_eq!(5555, num1.to_u32().unwrap());
+
+        let mut num1 = BigInteger::from_u32(230);
+        num1.multiply_digit(7).unwrap();
+
+        assert_eq!(1610, num1.to_u32().unwrap());
+
+        let mut num1 = BigInteger::from_u32(230);
+        num1.pow_10(2);
+
+        assert_eq!(23000, num1.to_u32().unwrap());
+
+        let mut num1 = BigInteger::from_u32(9010);
+        let num2 = BigInteger::from_u32(77);
+        num1.multiply(&num2);
+
+        assert_eq!(693770, num1.to_u32().unwrap());
     }
 
     #[test]
@@ -94,6 +110,8 @@ mod tests {
 
     #[test]
     fn misc_funcs() {
+        assert_eq!(numrepeats(22769), true);
+        assert_eq!(numrepeats(126489), false);
         assert_eq!(numcat(124, 77), 12477);
         assert_eq!(place(1, 0), Some(1));
         assert_eq!(place(0, 0), Some(0));
@@ -105,6 +123,7 @@ mod tests {
         assert_eq!(numdigits(25502), 5);
         assert_eq!(numdigits(0), 1);
         assert_eq!(numdigits(1), 1);
+        assert_eq!(numdigits(4865197302), 10);
         assert_eq!(factorial(0), 1);
         assert_eq!(factorial(1), 1);
         assert_eq!(factorial(9), 362880);

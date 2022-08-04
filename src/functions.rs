@@ -1,5 +1,32 @@
 use crate::factor::*;
-use std::collections::HashMap;
+use std::collections::{HashMap, HashSet};
+
+/// return the digits of a number as Vec<u8> in little endian order
+pub fn digits(n: u64) -> Vec<u8> {
+    let mut arr: Vec<u8> = Vec::new();
+    let mut place = 1;
+    while place <= n {
+        let val = (n % (place * 10)) / place;
+        arr.push(val as u8);
+        place *= 10;
+    }
+
+    arr
+}
+
+/// returns true if there are repeated digits
+pub fn numrepeats(n: u64) -> bool {
+    let mut map = HashSet::new();
+    let mut place: u64 = 1;
+    while place <= n {
+        let val = (n % (place * 10)) / place;
+        if !map.insert(val) {
+            return true;
+        }
+        place *= 10;
+    }
+    false
+}
 
 /// create a number that is the concatenation of two nums
 pub fn numcat(a: u64, b: u64) -> u64 {
@@ -73,4 +100,35 @@ pub fn factorial(n: u32) -> u32 {
     } else {
         n * factorial(n - 1)
     }
+}
+
+/// determine if an integer is palindromic
+pub fn is_palindromic_num(n: u64) -> bool {
+    let nf = n as f64;
+    let max = nf.log10().floor() as u64 + 1;
+
+    let mut i = 0;
+    while i < max / 2 {
+        let place1 = u64::pow(10, i as u32);
+        let place2 = u64::pow(10, (max - (i + 1)) as u32);
+        let digit1 = (n % (place1 * 10)) / place1;
+        let digit2 = (n % (place2 * 10)) / place2;
+        if digit1 != digit2 {
+            return false;
+        }
+        i += 1;
+    }
+    return true;
+}
+
+/// determine if a vec is palindromic
+pub fn is_palindromic<T: Eq>(arr: Vec<T>) -> bool {
+    for a in 0..=(arr.len() / 2) {
+        let b = arr.len() - (a + 1);
+
+        if arr[a] != arr[b] {
+            return false;
+        }
+    }
+    true
 }
