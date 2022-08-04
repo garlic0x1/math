@@ -77,24 +77,24 @@ mod tests {
 
     #[test]
     fn big_nums() {
-        let mut num1 = BigInteger::from_u32(1234);
-        let num2 = BigInteger::from_string("4321").unwrap();
+        let mut num1 = BigInteger::from_u32(1234, None);
+        let num2 = BigInteger::from_string("4321", None).unwrap();
         num1.add(&num2);
 
         assert_eq!(5555, num1.to_u32().unwrap());
 
-        let mut num1 = BigInteger::from_u32(230);
+        let mut num1 = BigInteger::from_u32(230, None);
         num1.multiply_digit(7).unwrap();
 
         assert_eq!(1610, num1.to_u32().unwrap());
 
-        let mut num1 = BigInteger::from_u32(230);
+        let mut num1 = BigInteger::from_u32(230, None);
         num1.pow_10(2);
 
         assert_eq!(23000, num1.to_u32().unwrap());
 
-        let mut num1 = BigInteger::from_u32(9010);
-        let num2 = BigInteger::from_u32(77);
+        let mut num1 = BigInteger::from_u32(9010, None);
+        let num2 = BigInteger::from_u32(77, None);
         num1.multiply(&num2);
 
         assert_eq!(693770, num1.to_u32().unwrap());

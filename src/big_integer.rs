@@ -5,18 +5,21 @@ pub struct BigInteger {
     // little endian
     sign: bool,
     array: Vec<u8>,
+    // optional digit cap
+    cap: Option<u32>,
 }
 
 impl BigInteger {
-    pub fn from_vec(vec: Vec<u8>) -> Self {
+    pub fn from_vec(array: Vec<u8>, cap: Option<u32>) -> Self {
         Self {
             sign: true,
-            array: vec,
+            array,
+            cap,
         }
     }
 
-    pub fn from_string(s: &str) -> Result<Self> {
-        let mut array: Vec<u8> = Vec::new();
+    pub fn from_string(s: &str, cap: Option<u32>) -> Result<Self> {
+        let array: Vec<u8> = Vec::new();
         let mut sign = true;
 
         if let Some(first_char) = s.chars().nth(0) {
@@ -31,18 +34,20 @@ impl BigInteger {
             reversed.pop();
         }
 
+        let mut s = Self { sign, array, cap };
+
         for c in reversed.chars() {
             if let Some(digit) = c.to_digit(10) {
-                array.push(digit as u8);
+                s.push_big(digit as u8);
             } else {
                 yeet!("must consist of digits and optional sign");
             }
         }
 
-        Ok(Self { sign, array })
+        Ok(s)
     }
 
-    pub fn from_u32(n: u32) -> Self {
+    pub fn from_u32(n: u32, cap: Option<u32>) -> Self {
         let mut arr: Vec<u8> = Vec::new();
         let mut place: u32 = 1;
         while place <= n {
@@ -53,6 +58,7 @@ impl BigInteger {
         return Self {
             sign: true,
             array: arr,
+            cap,
         };
     }
 
@@ -88,29 +94,14 @@ impl BigInteger {
         &self.array
     }
 
-    /*
-           234
-        x   17
-
-          1638
-        + 2340
-
-          3978
-    */
-
     pub fn multiply(&mut self, other: &Self) {
-        let mut sum = Self::from_u32(0);
+        let mut sum = Self::from_u32(0, self.cap);
 
-        println!("{}", self.to_u32().unwrap());
         for (place, digit) in other.array.iter().enumerate() {
             let mut a = self.clone();
-            println!("{digit} {place} {}", a.to_string());
             a.multiply_digit(*digit).unwrap();
-            println!("{digit} {place} {}", a.to_string());
             a.pow_10(place);
-            println!("{digit} {place} {}", a.to_string());
             sum.add(&a);
-            println!("sum: {}", sum.to_u32().unwrap());
         }
 
         self.array = sum.raw_vec().clone();
@@ -120,6 +111,18 @@ impl BigInteger {
         let mut vec = vec![0; n];
         vec.extend(self.array.clone());
         self.array = vec;
+    }
+
+    pub fn power(&mut self, n: u32) {
+        match n {
+            0 => self.array = vec![0],
+            1 => return,
+            n => {
+                for _ in 1..n {
+                    self.multiply(&self.clone());
+                }
+            }
+        }
     }
 
     /// must be a single digit factor
@@ -143,13 +146,29 @@ impl BigInteger {
         // we can have either one or two value carries this way.
         if carry != 0 {
             if carry / 10 < 1 {
-                self.array.push(carry);
+                self.push_big(carry);
             } else {
-                self.array.push(carry % 10);
-                self.array.push(carry / 10);
+                self.push_big(carry % 10);
+                self.push_big(carry / 10);
             }
         }
+
         Ok(())
+    }
+
+    /// appends to little endian, false if max length
+    fn push_big(&mut self, digit: u8) -> bool {
+        if let Some(cap) = self.cap {
+            if self.array.len() < cap as usize {
+                self.array.push(digit);
+                true
+            } else {
+                false
+            }
+        } else {
+            self.array.push(digit);
+            true
+        }
     }
 
     pub fn add(&mut self, other: &Self) {
@@ -175,7 +194,7 @@ impl BigInteger {
             });
 
         if carry != 0 {
-            self.array.push(carry);
+            self.push_big(carry);
         }
     }
 }
