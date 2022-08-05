@@ -50,10 +50,17 @@ impl BigInteger {
     pub fn from_u32(n: u32, cap: Option<u32>) -> Self {
         let mut arr: Vec<u8> = Vec::new();
         let mut place: u32 = 1;
+        let mut c = 0;
         while place <= n {
+            if let Some(cap) = cap {
+                if c >= cap {
+                    break;
+                }
+            }
             let val = (n % (place * 10)) / place;
             arr.push(val as u8);
             place *= 10;
+            c += 1;
         }
         return Self {
             sign: true,
@@ -110,6 +117,11 @@ impl BigInteger {
     pub fn pow_10(&mut self, n: usize) {
         let mut vec = vec![0; n];
         vec.extend(self.array.clone());
+        if let Some(cap) = self.cap {
+            while vec.len() > cap as usize {
+                vec.pop();
+            }
+        }
         self.array = vec;
     }
 
