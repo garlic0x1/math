@@ -1,12 +1,43 @@
+use std::{
+    cmp::Ordering,
+    hash::{Hash, Hasher},
+};
+
 use anyhow::{bail as yeet, Result};
 
-#[derive(Clone)]
+#[derive(Eq, Clone)]
 pub struct BigInteger {
     // little endian
     sign: bool,
     array: Vec<u8>,
     // optional digit cap
     cap: Option<u32>,
+}
+
+impl Hash for BigInteger {
+    fn hash<H: Hasher>(&self, state: &mut H) {
+        self.array.hash(state);
+        self.cap.hash(state);
+        self.sign.hash(state);
+    }
+}
+
+impl Ord for BigInteger {
+    fn cmp(&self, other: &Self) -> Ordering {
+        self.array.cmp(&other.array)
+    }
+}
+
+impl PartialOrd for BigInteger {
+    fn partial_cmp(&self, other: &Self) -> Option<Ordering> {
+        Some(self.cmp(other))
+    }
+}
+
+impl PartialEq for BigInteger {
+    fn eq(&self, other: &Self) -> bool {
+        self.array == other.array && self.sign == other.sign
+    }
 }
 
 impl BigInteger {
@@ -130,8 +161,9 @@ impl BigInteger {
             0 => self.array = vec![0],
             1 => return,
             n => {
+                let fact = self.clone();
                 for _ in 1..n {
-                    self.multiply(&self.clone());
+                    self.multiply(&fact);
                 }
             }
         }

@@ -38,13 +38,12 @@ impl Binary {
 
     pub fn to_u32(&self) -> u32 {
         let mut sum = 0;
-        let mut place = 1;
-        for bit in self.bitvec.iter() {
-            if *bit {
-                sum += place;
+        self.bitvec.iter().fold(1, |p, b| {
+            if *b {
+                sum += p;
             }
-            place *= 2
-        }
+            p * 2
+        });
         sum
     }
 

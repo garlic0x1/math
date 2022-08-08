@@ -3,6 +3,7 @@ pub mod big_integer;
 pub mod binary;
 pub mod combinations;
 pub mod crypto;
+pub mod digits;
 pub mod factor;
 pub mod functions;
 pub mod permutations;
@@ -13,11 +14,20 @@ mod tests {
     use crate::big_integer::*;
     use crate::binary::*;
     use crate::combinations::*;
+    use crate::digits::*;
     use crate::factor::*;
     use crate::functions::*;
     use crate::permutations::*;
     use crate::sieve::*;
     use std::time::Instant;
+
+    #[test]
+    fn digits() {
+        // 234 in base 10
+        let mut lend: LEndian = LEndian::new(234, 10);
+        assert_eq!(lend.next(), Some(4));
+        assert_eq!(lend.last(), Some(2));
+    }
 
     #[test]
     fn crypto() {
