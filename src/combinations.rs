@@ -5,7 +5,7 @@ use crate::{
     functions::{factorial_map, multiply_map},
 };
 
-pub fn n_combinations(n: u64, r: u64) -> Result<u64> {
+pub fn n_combinations(n: u32, r: u32) -> Result<u32> {
     if n < r {
         yeet!("n < r, cannot make combinations");
     }

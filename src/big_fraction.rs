@@ -2,12 +2,12 @@ use anyhow::{bail as yeet, Result};
 use std::collections::HashMap;
 
 pub struct BigFraction {
-    numerator: HashMap<u64, u32>,
-    denominator: HashMap<u64, u32>,
+    numerator: HashMap<u32, u32>,
+    denominator: HashMap<u32, u32>,
 }
 
 impl BigFraction {
-    pub fn from_fact_map(numerator: HashMap<u64, u32>, denominator: HashMap<u64, u32>) -> Self {
+    pub fn from_fact_map(numerator: HashMap<u32, u32>, denominator: HashMap<u32, u32>) -> Self {
         Self {
             numerator,
             denominator,
@@ -25,8 +25,8 @@ impl BigFraction {
         }
     }
 
-    pub fn numerator(&self) -> Result<u64> {
-        let mut num: u64 = 1;
+    pub fn numerator(&self) -> Result<u32> {
+        let mut num: u32 = 1;
         for (prime, count) in self.numerator.iter() {
             if let Some(fact) = prime.checked_pow(*count) {
                 if let Some(new) = num.checked_mul(fact) {
@@ -41,8 +41,8 @@ impl BigFraction {
         Ok(num)
     }
 
-    pub fn denominator(&self) -> Result<u64> {
-        let mut den: u64 = 1;
+    pub fn denominator(&self) -> Result<u32> {
+        let mut den: u32 = 1;
         for (prime, count) in self.denominator.iter() {
             if let Some(fact) = prime.checked_pow(*count) {
                 if let Some(new) = den.checked_mul(fact) {
