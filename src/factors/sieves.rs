@@ -20,8 +20,31 @@ fn fill_mults(n: u64, i: u64, fact: u64, sieve: &mut Vec<u64>) {
     }
 }
 
+/// perform sieve up to and including n, true is prime, false is composite
+pub fn eratosthenes(n: u64) -> Vec<bool> {
+    let mut sieve = vec![true; (n + 1) as usize];
+    erat_rec(n, 2, &mut sieve);
+    sieve
+}
+
+fn erat_rec(n: u64, i: u64, sieve: &mut Vec<bool>) {
+    if i * i <= n {
+        if sieve[i as usize] {
+            cross_comps(n, i, i * 2, sieve);
+        }
+        erat_rec(n, i + 1, sieve)
+    }
+}
+
+fn cross_comps(n: u64, i: u64, fact: u64, sieve: &mut Vec<bool>) {
+    if fact <= n {
+        sieve[fact as usize] = false;
+        cross_comps(n, i, fact + i, sieve)
+    }
+}
+
 /// perform sieve to limit, true is prime, false is composite
-pub fn eratosthenes(limit: u64) -> Vec<bool> {
+pub fn eratosthenes_looping(limit: u64) -> Vec<bool> {
     let mut sieve = vec![true; limit as usize + 1];
 
     let mut i = 2;
@@ -43,13 +66,20 @@ pub fn eratosthenes(limit: u64) -> Vec<bool> {
 pub fn primes(limit: u64) -> Vec<u64> {
     let mut primes = Vec::new();
 
-    let sieve = eratosthenes(limit);
+    // alternate method
+    eratosthenes(limit)
+        .iter()
+        .enumerate()
+        .filter(|(i, &p)| *i > 1 && p)
+        .for_each(|(i, _)| primes.push(i as u64));
 
-    for i in 2..limit + 1 {
-        if sieve[i as usize] == true {
-            primes.push(i);
-        }
-    }
+    // let sieve = eratosthenes(limit);
+
+    // for i in 2..limit + 1 {
+    //     if sieve[i as usize] == true {
+    //         primes.push(i);
+    //     }
+    // }
 
     primes
 }

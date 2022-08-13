@@ -30,5 +30,6 @@ mod tests {
         assert_eq!(composites(12), vec![4, 6, 8, 9, 10, 12]);
         assert_eq!(primes(12), vec![2, 3, 5, 7, 11]);
         assert_eq!(primes(23), vec![2, 3, 5, 7, 11, 13, 17, 19, 23]);
+        assert_eq!(eratosthenes(50), eratosthenes_looping(50));
     }
 }
