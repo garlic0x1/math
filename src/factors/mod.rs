@@ -36,5 +36,9 @@ mod tests {
         assert_eq!(div_sieve(12).last().unwrap(), &6);
         assert_eq!(div_sieve(14).last().unwrap(), &4);
         assert_eq!(div_sieve(15).last().unwrap(), &4);
+
+        assert_eq!(totient_sieve(10), vec![0, 1, 1, 2, 2, 4, 2, 6, 4, 6, 4]);
+        assert_eq!(totient_sieve(5), vec![0, 1, 1, 2, 2, 4]);
+        assert_eq!(totient_sieve(10).last().unwrap(), &4);
     }
 }

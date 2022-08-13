@@ -1,5 +1,5 @@
 /// generate a sieve of divisor counts
-/// (zero index is unused, i == n)
+/// sieve includes 0..=n (zero index is unused, i == n)
 pub fn div_sieve(n: u64) -> Vec<u64> {
     let mut sieve = vec![0u64; (n + 1) as usize];
     div_sieve_rec(n, 1, &mut sieve);
@@ -20,6 +20,23 @@ fn fill_mults(n: u64, i: u64, fact: u64, sieve: &mut Vec<u64>) {
     }
 }
 
+/// generate a sieve of Euler's totient
+/// sieve includes 0..=n (zero index is unused, i == n)
+pub fn totient_sieve(n: u64) -> Vec<u64> {
+    let mut sieve: Vec<u64> = (0..=n).collect();
+    for p in 2..=n {
+        if sieve[p as usize] == p {
+            sieve[p as usize] -= 1;
+            let mut i = 2 * p;
+            while i <= n {
+                sieve[i as usize] = (sieve[i as usize] / p) * (p - 1);
+                i += p;
+            }
+        }
+    }
+    sieve
+}
+
 /// perform sieve up to and including n, true is prime, false is composite
 pub fn eratosthenes(n: u64) -> Vec<bool> {
     let mut sieve = vec![true; (n + 1) as usize];
@@ -30,7 +47,7 @@ pub fn eratosthenes(n: u64) -> Vec<bool> {
 fn erat_rec(n: u64, i: u64, sieve: &mut Vec<bool>) {
     if i * i <= n {
         if sieve[i as usize] {
-            cross_comps(n, i, i * 2, sieve);
+            cross_comps(n, i, i * 2, sieve)
         }
         erat_rec(n, i + 1, sieve)
     }
