@@ -1,4 +1,5 @@
-use crate::factor::*;
+use crate::factors::primes::*;
+
 use std::collections::{HashMap, HashSet};
 
 /// return the digits of a number as Vec<u8> in little endian order

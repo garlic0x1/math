@@ -1,4 +1,4 @@
-use anyhow::{bail as yeet, Result};
+use anyhow::{bail, Result};
 use std::collections::HashMap;
 
 pub struct BigFraction {
@@ -32,10 +32,10 @@ impl BigFraction {
                 if let Some(new) = num.checked_mul(fact) {
                     num = new;
                 } else {
-                    yeet!("overflow");
+                    bail!("overflow");
                 }
             } else {
-                yeet!("overflow");
+                bail!("overflow");
             }
         }
         Ok(num)
@@ -48,10 +48,10 @@ impl BigFraction {
                 if let Some(new) = den.checked_mul(fact) {
                     den = new;
                 } else {
-                    yeet!("overflow");
+                    bail!("overflow");
                 }
             } else {
-                yeet!("overflow");
+                bail!("overflow");
             }
         }
         Ok(den)

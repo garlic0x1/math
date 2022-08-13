@@ -1,25 +1,17 @@
-pub mod big_fraction;
-pub mod big_integer;
-pub mod binary;
+pub mod bignums;
 pub mod combinations;
 pub mod crypto;
 pub mod digits;
-pub mod factor;
+pub mod factors;
 pub mod functions;
 pub mod permutations;
-pub mod sieve;
 
 #[cfg(test)]
 mod tests {
-    use crate::big_integer::*;
-    use crate::binary::*;
     use crate::combinations::*;
     use crate::digits::*;
-    use crate::factor::*;
     use crate::functions::*;
     use crate::permutations::*;
-    use crate::sieve::*;
-    use std::time::Instant;
 
     #[test]
     fn digits() {
@@ -32,21 +24,6 @@ mod tests {
     #[test]
     fn crypto() {
         assert_eq!(65 ^ 42, 107);
-    }
-
-    #[test]
-    fn factor_test() {
-        assert_eq!(prime_factors(13195), vec![5, 7, 13, 29]);
-        // assert_eq!(largest_prime(600851475143), 6857);
-        assert_eq!(is_prime(2_147_483_647), true);
-    }
-
-    #[test]
-    fn sieves() {
-        assert_eq!(composites(6), vec![4, 6]);
-        assert_eq!(composites(12), vec![4, 6, 8, 9, 10, 12]);
-        assert_eq!(primes(12), vec![2, 3, 5, 7, 11]);
-        assert_eq!(primes(23), vec![2, 3, 5, 7, 11, 13, 17, 19, 23]);
     }
 
     #[test]
@@ -69,45 +46,6 @@ mod tests {
     fn combinations() {
         assert_eq!(n_combinations(5, 3).unwrap(), 10);
         assert_eq!(n_combinations(23, 10).unwrap(), 1144066);
-    }
-
-    #[test]
-    fn binary_nums() {
-        let bin = Binary::from_u32(419);
-        assert_eq!(&bin.big_endian(), "110100011");
-        assert_eq!(bin.even(), false);
-        let bin = Binary::from_u32(23);
-        assert_eq!(&bin.little_endian(), "11101");
-        assert_eq!(bin.even(), false);
-        let mut bin = Binary::from_str("110100011").unwrap();
-        bin.double();
-        assert_eq!(bin.to_u32(), 838);
-        assert_eq!(bin.even(), true);
-    }
-
-    #[test]
-    fn big_nums() {
-        let mut num1 = BigInteger::from_u32(1234, None);
-        let num2 = BigInteger::from_string("4321", None).unwrap();
-        num1.add(&num2);
-
-        assert_eq!(5555, num1.to_u32().unwrap());
-
-        let mut num1 = BigInteger::from_u32(230, None);
-        num1.multiply_digit(7).unwrap();
-
-        assert_eq!(1610, num1.to_u32().unwrap());
-
-        let mut num1 = BigInteger::from_u32(230, None);
-        num1.pow_10(2);
-
-        assert_eq!(23000, num1.to_u32().unwrap());
-
-        let mut num1 = BigInteger::from_u32(9010, None);
-        let num2 = BigInteger::from_u32(77, None);
-        num1.multiply(&num2);
-
-        assert_eq!(693770, num1.to_u32().unwrap());
     }
 
     #[test]
@@ -137,6 +75,5 @@ mod tests {
         assert_eq!(factorial(0), 1);
         assert_eq!(factorial(1), 1);
         assert_eq!(factorial(9), 362880);
-        assert_eq!(fact_map(362880), factorial_map(9));
     }
 }

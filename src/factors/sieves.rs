@@ -1,3 +1,25 @@
+/// generate a sieve of divisor counts
+/// (zero index is unused, i == n)
+pub fn div_sieve(n: u64) -> Vec<u64> {
+    let mut sieve = vec![0u64; (n + 1) as usize];
+    div_sieve_rec(n, 1, &mut sieve);
+    sieve
+}
+
+fn div_sieve_rec(n: u64, i: u64, sieve: &mut Vec<u64>) {
+    if n >= i {
+        fill_mults(n, i, 1, sieve);
+        div_sieve_rec(n, i + 1, sieve)
+    }
+}
+
+fn fill_mults(n: u64, i: u64, fact: u64, sieve: &mut Vec<u64>) {
+    if i * fact <= n {
+        sieve[(i * fact) as usize] += 1;
+        fill_mults(n, i, fact + 1, sieve);
+    }
+}
+
 /// perform sieve to limit, true is prime, false is composite
 pub fn eratosthenes(limit: u64) -> Vec<bool> {
     let mut sieve = vec![true; limit as usize + 1];

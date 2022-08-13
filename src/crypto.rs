@@ -1,3 +1,4 @@
+/// decrypt ascii text (as used in PE XOR problem)
 pub fn xor_decimal_text(text: &Vec<u32>, key: &Vec<u32>) -> Vec<u32> {
     let mut vec = Vec::new();
 

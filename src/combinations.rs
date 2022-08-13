@@ -1,13 +1,13 @@
-use anyhow::{bail as yeet, Result};
+use anyhow::{bail, Result};
 
 use crate::{
-    big_fraction::BigFraction,
+    bignums::big_fraction::*,
     functions::{factorial_map, multiply_map},
 };
 
 pub fn n_combinations(n: u32, r: u32) -> Result<u32> {
     if n < r {
-        yeet!("n < r, cannot make combinations");
+        bail!("n < r, cannot make combinations");
     }
 
     let numerator = factorial_map(n);

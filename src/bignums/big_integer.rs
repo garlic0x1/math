@@ -3,7 +3,7 @@ use std::{
     hash::{Hash, Hasher},
 };
 
-use anyhow::{bail as yeet, Result};
+use anyhow::{bail, Result};
 
 #[derive(Eq, Clone)]
 pub struct BigInteger {
@@ -71,7 +71,7 @@ impl BigInteger {
             if let Some(digit) = c.to_digit(10) {
                 s.push_big(digit as u8);
             } else {
-                yeet!("must consist of digits and optional sign");
+                bail!("must consist of digits and optional sign");
             }
         }
 
@@ -172,7 +172,7 @@ impl BigInteger {
     /// must be a single digit factor
     pub fn multiply_digit(&mut self, factor: u8) -> Result<()> {
         if factor > 9 {
-            yeet!("must multiply by single digit factor");
+            bail!("must multiply by single digit factor");
         }
 
         // fold over the array, multiplying and carrying
