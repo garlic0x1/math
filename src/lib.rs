@@ -3,14 +3,14 @@ pub mod combinations;
 pub mod crypto;
 pub mod digits;
 pub mod factors;
-pub mod functions;
+pub mod misc_functions;
 pub mod permutations;
 
 #[cfg(test)]
 mod tests {
     use crate::combinations::*;
     use crate::digits::*;
-    use crate::functions::*;
+    use crate::misc_functions::*;
     use crate::permutations::*;
 
     #[test]

@@ -2,7 +2,7 @@ use anyhow::{bail, Result};
 
 use crate::{
     bignums::big_fraction::*,
-    functions::{factorial_map, multiply_map},
+    misc_functions::{factorial_map, multiply_map},
 };
 
 pub fn n_combinations(n: u32, r: u32) -> Result<u32> {

@@ -4,7 +4,7 @@ pub mod totient;
 
 #[cfg(test)]
 mod tests {
-    use crate::functions::factorial_map;
+    use crate::misc_functions::factorial_map;
 
     use super::primes::*;
     use super::sieves::*;

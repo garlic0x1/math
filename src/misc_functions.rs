@@ -2,6 +2,15 @@ use crate::factors::primes::*;
 
 use std::collections::{HashMap, HashSet};
 
+/// greatest common factor, Euclidean algorithm
+pub fn gcf(a: u32, b: u32) -> u32 {
+    if b == 0 {
+        a
+    } else {
+        gcf(b, a % b)
+    }
+}
+
 /// return the digits of a number as Vec<u8> in little endian order
 pub fn digits(n: u32) -> Vec<u8> {
     let mut arr: Vec<u8> = Vec::new();
