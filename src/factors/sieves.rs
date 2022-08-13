@@ -43,6 +43,26 @@ fn cross_comps(n: u64, i: u64, fact: u64, sieve: &mut Vec<bool>) {
     }
 }
 
+/// vec of primes up to and including limit
+pub fn primes(limit: u64) -> Vec<u64> {
+    eratosthenes(limit)
+        .iter()
+        .enumerate()
+        .filter(|(i, &p)| *i > 1 && p)
+        .map(|(i, _)| i as u64)
+        .collect()
+}
+
+/// vec of composites up to and including limit
+pub fn composites(limit: u64) -> Vec<u64> {
+    eratosthenes(limit)
+        .iter()
+        .enumerate()
+        .filter(|(i, &p)| *i > 1 && !p)
+        .map(|(i, _)| i as u64)
+        .collect()
+}
+
 /// perform sieve to limit, true is prime, false is composite
 pub fn eratosthenes_looping(limit: u64) -> Vec<bool> {
     let mut sieve = vec![true; limit as usize + 1];
@@ -60,41 +80,4 @@ pub fn eratosthenes_looping(limit: u64) -> Vec<bool> {
     }
 
     sieve
-}
-
-/// vec of primes up to and including limit
-pub fn primes(limit: u64) -> Vec<u64> {
-    let mut primes = Vec::new();
-
-    // alternate method
-    eratosthenes(limit)
-        .iter()
-        .enumerate()
-        .filter(|(i, &p)| *i > 1 && p)
-        .for_each(|(i, _)| primes.push(i as u64));
-
-    // let sieve = eratosthenes(limit);
-
-    // for i in 2..limit + 1 {
-    //     if sieve[i as usize] == true {
-    //         primes.push(i);
-    //     }
-    // }
-
-    primes
-}
-
-/// vec of composites up to and including limit
-pub fn composites(limit: u64) -> Vec<u64> {
-    let mut composites = Vec::new();
-
-    let sieve = eratosthenes(limit);
-
-    for i in 2..limit + 1 {
-        if sieve[i as usize] == false {
-            composites.push(i);
-        }
-    }
-
-    composites
 }
