@@ -19,6 +19,9 @@ mod tests {
         let mut lend: LEndian = LEndian::new(234, 10);
         assert_eq!(lend.next(), Some(4));
         assert_eq!(lend.last(), Some(2));
+        let mut lend: BEndian = BEndian::new(234, 10);
+        assert_eq!(lend.next(), Some(2));
+        assert_eq!(lend.last(), Some(4));
     }
 
     #[test]

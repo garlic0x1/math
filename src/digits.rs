@@ -44,7 +44,7 @@ impl Iterator for BEndian {
     type Item = u8;
 
     fn next(&mut self) -> Option<Self::Item> {
-        if self.place <= self.n {
+        if self.place > 0 {
             let val = self.n % (self.place * self.base as u64) / self.place;
             self.place /= self.base as u64;
             Some(val as u8)
