@@ -17,13 +17,14 @@ fn totient_recursive(n: u32, i: u32, res: u32) -> u32 {
     }
 }
 
-pub fn pow_fac(n: u32, i: u32) -> u32 {
+fn pow_fac(n: u32, i: u32) -> u32 {
     if n % i == 0 {
         pow_fac(n / i, i)
     } else {
         n
     }
 }
+
 /// calculate phi(n) using loops
 pub fn totient_traditional(n: u32) -> u32 {
     let mut n = n;
@@ -47,6 +48,7 @@ pub fn totient_traditional(n: u32) -> u32 {
 }
 
 /// returns greatest common factor
+/// Euclidean algorithm
 pub fn gcf(a: u32, b: u32) -> u32 {
     if b == 0 {
         a
