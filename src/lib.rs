@@ -15,13 +15,13 @@ mod tests {
 
     #[test]
     fn digits() {
-        // 234 in base 10
         let mut lend: LEndian = LEndian::new(234, 10);
         assert_eq!(lend.next(), Some(4));
         assert_eq!(lend.last(), Some(2));
-        let mut lend: BEndian = BEndian::new(234, 10);
-        assert_eq!(lend.next(), Some(2));
-        assert_eq!(lend.last(), Some(4));
+
+        let mut lend: BEndian = BEndian::new(1821036330, 10);
+        assert_eq!(lend.next(), Some(1));
+        assert_eq!(lend.last(), Some(0));
     }
 
     #[test]
@@ -34,9 +34,11 @@ mod tests {
         let permuter = Permuter::new(vec!['a', 'b', 'c']);
         let perms: Vec<Vec<char>> = permuter.collect();
         assert_eq!(format!("{:?}", perms), "[['a', 'b', 'c'], ['a', 'c', 'b'], ['b', 'a', 'c'], ['b', 'c', 'a'], ['c', 'a', 'b'], ['c', 'b', 'a']]");
+
         let permuter = Permuter::new(vec!['b', 'c']);
         let perms: Vec<Vec<char>> = permuter.collect();
         assert_eq!(format!("{:?}", perms), "[['b', 'c'], ['c', 'b']]");
+
         let permuter = Permuter::new(vec![1, 2, 3]);
         let perms: Vec<Vec<u32>> = permuter.rev().collect();
         assert_eq!(
@@ -55,6 +57,7 @@ mod tests {
     fn palindromes() {
         assert_eq!(is_palindromic_num(43400434), true);
         assert_eq!(is_palindromic_num(48400434), false);
+
         assert_eq!(is_palindromic(vec!["apple", "cherry", "blueberry"]), false);
         assert_eq!(is_palindromic(vec!["apple", "cherry", "apple"]), true);
     }
@@ -63,18 +66,19 @@ mod tests {
     fn misc_funcs() {
         assert_eq!(numrepeats(22769), true);
         assert_eq!(numrepeats(126489), false);
+
         assert_eq!(numcat(124, 77), 12477);
+
         assert_eq!(place(1, 0), Some(1));
         assert_eq!(place(0, 0), Some(0));
-        assert_eq!(place(124, 0), Some(4));
-        assert_eq!(place(124, 2), Some(1));
         assert_eq!(place(2550, 0), Some(0));
         assert_eq!(place(2550, 2), Some(5));
         assert_eq!(place(2550, 5), None);
+
         assert_eq!(numdigits(25502), 5);
         assert_eq!(numdigits(0), 1);
         assert_eq!(numdigits(1), 1);
-        // assert_eq!(numdigits(4865197302), 10);
+
         assert_eq!(factorial(0), 1);
         assert_eq!(factorial(1), 1);
         assert_eq!(factorial(9), 362880);

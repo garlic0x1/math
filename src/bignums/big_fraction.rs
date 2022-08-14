@@ -2,12 +2,12 @@ use anyhow::{bail, Result};
 use std::collections::HashMap;
 
 pub struct BigFraction {
-    pub numerator: HashMap<u32, u32>,
-    pub denominator: HashMap<u32, u32>,
+    pub numerator: HashMap<u64, u64>,
+    pub denominator: HashMap<u64, u64>,
 }
 
 impl BigFraction {
-    pub fn from_fact_map(numerator: HashMap<u32, u32>, denominator: HashMap<u32, u32>) -> Self {
+    pub fn from_fact_map(numerator: HashMap<u64, u64>, denominator: HashMap<u64, u64>) -> Self {
         Self {
             numerator,
             denominator,
@@ -26,11 +26,11 @@ impl BigFraction {
         }
     }
 
-    /// calculate to a u32 or fail on overflow
-    pub fn numerator(&self) -> Result<u32> {
-        let mut num: u32 = 1;
+    /// calculate to a u64 or fail on overflow
+    pub fn numerator(&self) -> Result<u64> {
+        let mut num: u64 = 1;
         for (prime, count) in self.numerator.iter() {
-            if let Some(fact) = prime.checked_pow(*count) {
+            if let Some(fact) = prime.checked_pow(*count as u32) {
                 if let Some(new) = num.checked_mul(fact) {
                     num = new;
                 } else {
@@ -43,11 +43,11 @@ impl BigFraction {
         Ok(num)
     }
 
-    /// calculate to a u32 or fail on overflow
-    pub fn denominator(&self) -> Result<u32> {
-        let mut den: u32 = 1;
+    /// calculate to a u64 or fail on overflow
+    pub fn denominator(&self) -> Result<u64> {
+        let mut den: u64 = 1;
         for (prime, count) in self.denominator.iter() {
-            if let Some(fact) = prime.checked_pow(*count) {
+            if let Some(fact) = prime.checked_pow(*count as u32) {
                 if let Some(new) = den.checked_mul(fact) {
                     den = new;
                 } else {

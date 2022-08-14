@@ -1,14 +1,23 @@
+pub mod mobius;
 pub mod primes;
 pub mod sieves;
 pub mod totient;
 
 #[cfg(test)]
 mod tests {
+    use crate::factors::mobius;
     use crate::misc_functions::factorial_map;
 
     use super::primes::*;
     use super::sieves::*;
     use super::totient::*;
+
+    #[test]
+    fn mobius() {
+        assert_eq!(mobius::mobius(6), 1);
+        assert_eq!(mobius::mobius(4), 0);
+        assert_eq!(mobius::mobius(5), -1);
+    }
 
     #[test]
     fn primes_test() {

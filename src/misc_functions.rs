@@ -3,7 +3,7 @@ use crate::factors::primes::*;
 use std::collections::{HashMap, HashSet};
 
 /// greatest common factor, Euclidean algorithm
-pub fn gcf(a: u32, b: u32) -> u32 {
+pub fn gcf(a: u64, b: u64) -> u64 {
     if b == 0 {
         a
     } else {
@@ -12,7 +12,7 @@ pub fn gcf(a: u32, b: u32) -> u32 {
 }
 
 /// return the digits of a number as Vec<u8> in little endian order
-pub fn digits(n: u32) -> Vec<u8> {
+pub fn digits(n: u64) -> Vec<u8> {
     let mut arr: Vec<u8> = Vec::new();
     let mut place = 1;
     while place <= n {
@@ -25,9 +25,9 @@ pub fn digits(n: u32) -> Vec<u8> {
 }
 
 /// returns true if there are repeated digits
-pub fn numrepeats(n: u32) -> bool {
+pub fn numrepeats(n: u64) -> bool {
     let mut map = HashSet::new();
-    let mut place: u32 = 1;
+    let mut place: u64 = 1;
     while place <= n {
         let val = (n % (place * 10)) / place;
         if !map.insert(val) {
@@ -39,7 +39,7 @@ pub fn numrepeats(n: u32) -> bool {
 }
 
 /// create a number that is the concatenation of two nums
-pub fn numcat(a: u32, b: u32) -> u32 {
+pub fn numcat(a: u64, b: u64) -> u64 {
     let mut x = a;
     let mut dec = b;
 
@@ -52,7 +52,7 @@ pub fn numcat(a: u32, b: u32) -> u32 {
 }
 
 /// number of decimal digits in a number
-pub fn numdigits(n: u32) -> u32 {
+pub fn numdigits(n: u64) -> u64 {
     if n == 0 {
         return 1;
     }
@@ -69,11 +69,11 @@ pub fn numdigits(n: u32) -> u32 {
 }
 
 /// get the nth place of a number
-pub fn place(n: u32, i: usize) -> Option<u8> {
+pub fn place(n: u64, i: usize) -> Option<u8> {
     if n == 0 {
         return Some(0);
     }
-    let head = n / u32::pow(10, i as u32);
+    let head = n / u64::pow(10, i as u32);
     if head > 0 {
         Some((head % 10) as u8)
     } else {
@@ -82,7 +82,7 @@ pub fn place(n: u32, i: usize) -> Option<u8> {
 }
 
 /// multiply a factor map with another
-pub fn multiply_map(this: &mut HashMap<u32, u32>, that: &HashMap<u32, u32>) {
+pub fn multiply_map(this: &mut HashMap<u64, u64>, that: &HashMap<u64, u64>) {
     for (k, v) in that.iter() {
         if let Some(v2) = this.get_mut(k) {
             *v2 += v;
@@ -93,7 +93,7 @@ pub fn multiply_map(this: &mut HashMap<u32, u32>, that: &HashMap<u32, u32>) {
 }
 
 /// create a factor map from a factorial
-pub fn factorial_map(n: u32) -> HashMap<u32, u32> {
+pub fn factorial_map(n: u64) -> HashMap<u64, u64> {
     let mut map = HashMap::new();
     if n > 1 {
         map = fact_map(n);
@@ -104,7 +104,7 @@ pub fn factorial_map(n: u32) -> HashMap<u32, u32> {
     map
 }
 
-pub fn factorial(n: u32) -> u32 {
+pub fn factorial(n: u64) -> u64 {
     if n == 0 {
         1
     } else {
@@ -113,14 +113,14 @@ pub fn factorial(n: u32) -> u32 {
 }
 
 /// determine if an integer is palindromic
-pub fn is_palindromic_num(n: u32) -> bool {
+pub fn is_palindromic_num(n: u64) -> bool {
     let nf = n as f64;
-    let max = nf.log10().floor() as u32 + 1;
+    let max = nf.log10().floor() as u64 + 1;
 
     let mut i = 0;
     while i < max / 2 {
-        let place1 = u32::pow(10, i as u32);
-        let place2 = u32::pow(10, (max - (i + 1)) as u32);
+        let place1 = u64::pow(10, i as u32);
+        let place2 = u64::pow(10, (max - (i + 1)) as u32);
         let digit1 = (n % (place1 * 10)) / place1;
         let digit2 = (n % (place2 * 10)) / place2;
         if digit1 != digit2 {

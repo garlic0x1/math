@@ -1,6 +1,6 @@
 use std::collections::HashMap;
 
-pub fn smallest_prime(n: u32) -> u32 {
+pub fn smallest_prime(n: u64) -> u64 {
     if n % 2 == 0 {
         return 2;
     }
@@ -25,7 +25,7 @@ pub fn smallest_prime(n: u32) -> u32 {
 }
 
 /// get the unique prime factors as a vector
-pub fn prime_factors(n: u32) -> Vec<u32> {
+pub fn prime_factors(n: u64) -> Vec<u64> {
     let mut facts = Vec::new();
     let smallest = smallest_prime(n);
     if smallest != n {
@@ -38,7 +38,7 @@ pub fn prime_factors(n: u32) -> Vec<u32> {
 }
 
 /// create an occurence map of prime factors
-pub fn fact_map(n: u32) -> HashMap<u32, u32> {
+pub fn fact_map(n: u64) -> HashMap<u64, u64> {
     let facts = prime_factors(n);
     let mut factmap = HashMap::new();
     for fact in facts {
@@ -51,14 +51,14 @@ pub fn fact_map(n: u32) -> HashMap<u32, u32> {
     factmap
 }
 
-pub fn is_prime(n: u32) -> bool {
+pub fn is_prime(n: u64) -> bool {
     if n <= 1 {
         return false;
     }
     smallest_prime(n) == n
 }
 
-pub fn largest_prime(n: u32) -> u32 {
+pub fn largest_prime(n: u64) -> u64 {
     let smallest = smallest_prime(n);
     if smallest == n {
         n
