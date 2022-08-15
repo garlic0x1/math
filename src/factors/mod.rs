@@ -6,6 +6,7 @@ pub mod totient;
 #[cfg(test)]
 mod tests {
     use crate::factors::mobius;
+    use crate::factors::mobius::squarefrees;
     use crate::misc_functions::factorial_map;
 
     use super::primes::*;
@@ -17,15 +18,18 @@ mod tests {
         assert_eq!(mobius::mobius(6), 1);
         assert_eq!(mobius::mobius(4), 0);
         assert_eq!(mobius::mobius(5), -1);
+
+        assert_eq!(squarefrees(510510), 310346);
     }
 
     #[test]
     fn primes_test() {
-        assert_eq!(fact_map(362880), factorial_map(9));
-        assert_eq!(prime_factors(13195), vec![5, 7, 13, 29]);
-        // commented out since i switched to u32
-        // assert_eq!(largest_prime(600_851_475_143), 6857);
+        assert_eq!(largest_prime(600_851_475_143), 6857);
         assert_eq!(is_prime(2_147_483_647), true);
+        assert_eq!(is_prime(1), false);
+        assert_eq!(is_prime(0), false);
+        assert_eq!(prime_factors(13195), vec![5, 7, 13, 29]);
+        assert_eq!(fact_map(362880), factorial_map(9));
     }
 
     #[test]

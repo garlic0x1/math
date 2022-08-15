@@ -1,3 +1,29 @@
+/// generates sieves of prime squares, and factor counts
+/// sieve includes 0..=n (zero index is unused, i == n)
+pub fn mobius_sieve(limit: usize) -> (Vec<u64>, Vec<bool>) {
+    let mut factors = vec![0; limit + 1];
+    let mut squares = vec![false; limit + 1];
+
+    // for each prime
+    for p in 2..limit {
+        // skip composite numbers
+        if factors[p] != 0 {
+            continue;
+        }
+
+        // add prime factors
+        (p..limit).step_by(p).for_each(|i| factors[i] += 1);
+
+        // mark squares
+        let square = p * p;
+        (square..limit)
+            .step_by(square)
+            .for_each(|s| squares[s] = true);
+    }
+
+    (factors, squares)
+}
+
 /// generate a sieve of divisor counts
 /// sieve includes 0..=n (zero index is unused, i == n)
 pub fn div_sieve(n: u64) -> Vec<u64> {
