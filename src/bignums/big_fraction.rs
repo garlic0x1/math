@@ -1,12 +1,23 @@
 use anyhow::{bail, Result};
 use std::collections::HashMap;
 
+use crate::factors::primes::fact_map;
+
 pub struct BigFraction {
     pub numerator: HashMap<u64, u64>,
     pub denominator: HashMap<u64, u64>,
 }
 
 impl BigFraction {
+    pub fn new(numerator: u64, denominator: u64) -> Self {
+        let numerator = fact_map(numerator);
+        let denominator = fact_map(denominator);
+        Self {
+            numerator,
+            denominator,
+        }
+    }
+
     pub fn from_fact_map(numerator: HashMap<u64, u64>, denominator: HashMap<u64, u64>) -> Self {
         Self {
             numerator,

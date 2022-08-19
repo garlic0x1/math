@@ -1,5 +1,6 @@
 use std::{
     cmp::Ordering,
+    collections::HashMap,
     hash::{Hash, Hasher},
 };
 
@@ -11,7 +12,7 @@ pub struct BigInteger {
     sign: bool,
     array: Vec<u8>,
     // optional digit cap
-    cap: Option<u32>,
+    cap: Option<usize>,
 }
 
 impl Hash for BigInteger {
@@ -41,7 +42,7 @@ impl PartialEq for BigInteger {
 }
 
 impl BigInteger {
-    pub fn from_vec(array: Vec<u8>, cap: Option<u32>) -> Self {
+    pub fn from_vec(array: Vec<u8>, cap: Option<usize>) -> Self {
         Self {
             sign: true,
             array,
@@ -49,7 +50,19 @@ impl BigInteger {
         }
     }
 
-    pub fn from_string(s: &str, cap: Option<u32>) -> Result<Self> {
+    pub fn from_facts(factmap: HashMap<u64, u64>, cap: Option<usize>) -> Self {
+        let mut s = Self::from_u32(1, cap);
+
+        factmap.iter().for_each(|(n, c)| {
+            let mut bn = BigInteger::from_u64(*n, None);
+            bn.power(*c as u32);
+            s.multiply(&bn);
+        });
+
+        s
+    }
+
+    pub fn from_string(s: &str, cap: Option<usize>) -> Result<Self> {
         let array: Vec<u8> = Vec::new();
         let mut sign = true;
 
@@ -78,7 +91,28 @@ impl BigInteger {
         Ok(s)
     }
 
-    pub fn from_u32(n: u32, cap: Option<u32>) -> Self {
+    pub fn from_u64(n: u64, cap: Option<usize>) -> Self {
+        let mut arr: Vec<u8> = Vec::new();
+        let mut place: u64 = 1;
+        let mut c = 0;
+        while place <= n {
+            if let Some(cap) = cap {
+                if c >= cap {
+                    break;
+                }
+            }
+            let val = (n % (place * 10)) / place;
+            arr.push(val as u8);
+            place *= 10;
+            c += 1;
+        }
+        return Self {
+            sign: true,
+            array: arr,
+            cap,
+        };
+    }
+    pub fn from_u32(n: u32, cap: Option<usize>) -> Self {
         let mut arr: Vec<u8> = Vec::new();
         let mut place: u32 = 1;
         let mut c = 0;
@@ -106,6 +140,23 @@ impl BigInteger {
         for i in self.array.iter() {
             let mut stop: bool;
             (sum, stop) = sum.overflowing_add((*i as u32) * place);
+            if stop {
+                return Err(stop);
+            }
+            (place, stop) = place.overflowing_mul(10);
+            if stop {
+                return Err(stop);
+            }
+        }
+        Ok(sum)
+    }
+
+    pub fn to_u64(&self) -> Result<u64, bool> {
+        let mut place = 1;
+        let mut sum: u64 = 0;
+        for i in self.array.iter() {
+            let mut stop: bool;
+            (sum, stop) = sum.overflowing_add((*i as u64) * place);
             if stop {
                 return Err(stop);
             }
