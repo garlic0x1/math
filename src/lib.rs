@@ -5,6 +5,7 @@ pub mod digits;
 pub mod factors;
 pub mod misc_functions;
 pub mod permutations;
+pub mod squares;
 
 #[cfg(test)]
 mod tests {
@@ -12,6 +13,15 @@ mod tests {
     use crate::digits::*;
     use crate::misc_functions::*;
     use crate::permutations::*;
+    use crate::squares::*;
+
+    #[test]
+    fn squares() {
+        assert_eq!(int_sqrt(1), 1);
+        assert_eq!(int_sqrt(2), 1);
+        assert_eq!(int_sqrt(64), 8);
+        assert_eq!(int_sqrt(1929374254627488900), 1389019170);
+    }
 
     #[test]
     fn digits() {
